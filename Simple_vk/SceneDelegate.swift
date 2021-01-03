@@ -20,9 +20,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
 
         window = UIWindow(windowScene: scene as! UIWindowScene)
-      //  window?.rootViewController = LogInController()
+        window?.rootViewController = LogInController()
         
-        window?.rootViewController = NewsController()
+//        window?.rootViewController = NewsController()
         window?.makeKeyAndVisible()
     }
 

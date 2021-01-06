@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import RealmSwift
 
 private let reuseIdentifier = "GroupsCell"
 
@@ -20,15 +21,14 @@ class GroupsController: UITableViewController, UISearchResultsUpdating {
     let searchController = UISearchController(searchResultsController: nil)
     
     // MARK: Lifestyle
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        loadData()
+        
         configureUI()
-
-        ApiGetGroupsVK.shared.getData { [self]groups in
-            self.groups = groups
-            self.fullGroups = groups
-            tableView.reloadData()
+        ApiGetGroupsVK.shared.getData {[weak self] in
+            self?.loadData()
         }
     }
 
@@ -93,6 +93,18 @@ class GroupsController: UITableViewController, UISearchResultsUpdating {
         navigationItem.title = "Groups"
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .search,
                 target: self, action: #selector(openSearchGroups))
+    }
+    
+    func loadData() {
+        do {
+            let realm = try Realm()
+            let realmGroups = realm.objects(VkGroup.self).sorted(byKeyPath: "name")
+            self.groups = Array(realmGroups)
+            self.fullGroups = groups
+            tableView.reloadData()
+        } catch {
+            print(error)
+        }
     }
     
     

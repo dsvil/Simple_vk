@@ -7,10 +7,10 @@ import RealmSwift
 
 final class ApiGetFriendsVK {
     static let shared = ApiGetFriendsVK()
-    let baseUrl = "https://api.vk.com/method/"
-    let version = "5.126"
+    private let baseUrl = "https://api.vk.com/method/"
+    private let version = "5.126"
 
-    func getData(completion: @escaping ([VkFriend]) -> Void) {
+    func getData(completion: @escaping () -> Void) {
         let request = "friends.get"
         guard let user = Session.instance.userId else {
             return
@@ -33,17 +33,18 @@ final class ApiGetFriendsVK {
             do {
                 let friends = try JSONDecoder().decode(ResponseFd.self, from: data)
                 self.saveMyFriendsData(friends.response.items)
-                completion(friends.response.items)
+                completion()
             } catch {
                 print(error)
             }
         }
     }
-    func saveMyFriendsData(_ items: [VkFriend]) {
+    private func saveMyFriendsData(_ items: [VkFriend]) {
         do {
             let realm = try Realm()
             realm.beginWrite()
-            realm.add(items)
+            realm.add(items, update: .modified)
+            print(realm.configuration.fileURL!)
             try realm.commitWrite()
         } catch {
             print(error)

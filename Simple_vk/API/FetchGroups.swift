@@ -11,12 +11,10 @@ import RealmSwift
 
 final class ApiGetGroupsVK {
     static let shared = ApiGetGroupsVK()
-    let baseUrl = "https://api.vk.com/method/"
-    let version = "5.126"
-    let user = Session.instance.userId
-    let apiKey = Session.instance.token
+    private let baseUrl = "https://api.vk.com/method/"
+    private let version = "5.126"
 
-    func getData(completion: @escaping ([VkGroup]) -> Void) {
+    func getData(completion: @escaping () -> Void) {
         guard let user = Session.instance.userId else {
             return
         }
@@ -40,18 +38,18 @@ final class ApiGetGroupsVK {
             do {
                 let groups = try JSONDecoder().decode(Response.self, from: data)
                 saveMyGroupsData(groups.response.items)
-                completion(groups.response.items)
+                completion()
             } catch {
                 print(error)
             }
         }
     }
 
-    func saveMyGroupsData(_ items: [VkGroup]) {
+    private func saveMyGroupsData(_ items: [VkGroup]) {
         do {
             let realm = try Realm()
             realm.beginWrite()
-            realm.add(items)
+            realm.add(items, update: .modified)
             try realm.commitWrite()
         } catch {
             print(error)

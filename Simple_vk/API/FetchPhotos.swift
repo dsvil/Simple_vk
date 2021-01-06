@@ -11,8 +11,8 @@ import Alamofire
 class ApiGetPhotosVK {
 
     static let shared = ApiGetPhotosVK()
-    let baseUrl = "https://api.vk.com/method/"
-    let version = "5.126"
+    private let baseUrl = "https://api.vk.com/method/"
+    private let version = "5.126"
 
     func getData(user: Int?, completion: @escaping ([PhotoStaff]) -> Void) {
         let request = "photos.get"
@@ -41,7 +41,7 @@ class ApiGetPhotosVK {
         }
     }
 
-    func savePhotosData(_ items: [PhotoStaff]) {
+    private func savePhotosData(_ items: [PhotoStaff]) {
         do {
             let realm = try Realm()
             realm.beginWrite()

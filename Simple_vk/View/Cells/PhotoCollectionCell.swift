@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import RealmSwift
 
 class PhotoCollectionCell: UICollectionViewCell {
 
@@ -15,7 +16,7 @@ class PhotoCollectionCell: UICollectionViewCell {
         }
     }
 
-    let photoImage: UIImageView = {
+    private let photoImage: UIImageView = {
         let image = UIImageView()
         return image
     }()
@@ -48,6 +49,7 @@ class PhotoCollectionCell: UICollectionViewCell {
     }
     func applyCount (_ size: Int) {
         let url = URL(string: photo!.sizes[size].url)
-            photoImage.sd_setImage(with: url)
+        photoImage.sd_setImage(with: url)
+        
     }
 }

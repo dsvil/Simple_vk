@@ -6,13 +6,12 @@
 //
 
 import Alamofire
-import RealmSwift
 
 final class ApiGetGroupsVKSearch {
 
     static let shared = ApiGetGroupsVKSearch()
-    let baseUrl = "https://api.vk.com/method/"
-    let version = "5.126"
+    private let baseUrl = "https://api.vk.com/method/"
+    private let version = "5.126"
 
     func getData(searchText: String, completion: @escaping ([VkGroup]) -> Void) {
         let request = "groups.search"
@@ -34,21 +33,10 @@ final class ApiGetGroupsVKSearch {
             }
             do {
                 let groups = try JSONDecoder().decode(Response.self, from: data)
-                self.saveGroupsData(groups.response.items)
                 completion(groups.response.items)
             } catch {
                 print(error)
             }
-        }
-    }
-    func saveGroupsData(_ items: [VkGroup]) {
-        do {
-            let realm = try Realm()
-            realm.beginWrite()
-            realm.add(items)
-            try realm.commitWrite()
-        } catch {
-            print(error)
         }
     }
 }

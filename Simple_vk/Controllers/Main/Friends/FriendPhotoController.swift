@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import RealmSwift
 
 private let reuseIdentifier = "PhotoCell"
 
@@ -18,6 +19,7 @@ class FriendPhotoController: UICollectionViewController {
             collectionView.reloadData()
         }
     }
+    
 
     //MARK: Lifestyle
 
@@ -40,7 +42,6 @@ class FriendPhotoController: UICollectionViewController {
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! PhotoCollectionCell
-
         cell.photo = photos[indexPath.row]
         return cell
     }

@@ -11,7 +11,8 @@ import WebKit
 class LogInController: UIViewController {
 
     //MARK: Properties
-    var webview = WKWebView()
+    private var webview = WKWebView()
+    var revoke = 0
 
     //MARK: Lifestyle
     
@@ -41,6 +42,7 @@ class LogInController: UIViewController {
         urlComponents.queryItems = [
             URLQueryItem(name: "client_id", value: "7717352"),
             URLQueryItem(name: "display", value: "mobile"),
+            URLQueryItem(name: "revoke", value: "\(revoke)"), // Если поставить 1, то при входе потребуется подтвердить либо выйти
             URLQueryItem(name: "redirect_uri", value:
             "https://oauth.vk.com/blank.html"),
             URLQueryItem(name: "scope", value: "262150"),

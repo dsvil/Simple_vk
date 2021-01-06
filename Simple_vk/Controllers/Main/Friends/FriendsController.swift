@@ -7,6 +7,7 @@
 
 import UIKit
 import SDWebImage
+import RealmSwift
 
 private let reuseIdentifier = "FriendsCell"
 
@@ -29,11 +30,21 @@ class FriendsController: UITableViewController, UISearchResultsUpdating {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
-        ApiGetFriendsVK.shared.getData { [self] friends in
-            self.friends = friends
+        loadData()
+        ApiGetFriendsVK.shared.getData { [weak self] in
+            self?.loadData()
+        }
+    }
+    func loadData() {
+        do {
+            let realm = try Realm()
+            let realmFriends = realm.objects(VkFriend.self)
+            self.friends = Array(realmFriends)
             (filteredFirstCharacters, filteredSortedFriends) = sort(friends)
             (charactersBeforeSearch, sortedFriendsBeforeSearch) = sort(friends)
             tableView.reloadData()
+        } catch {
+            print(error)
         }
     }
 

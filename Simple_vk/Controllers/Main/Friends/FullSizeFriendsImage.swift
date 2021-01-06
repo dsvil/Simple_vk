@@ -16,6 +16,7 @@ class FullScreenImageController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
+        applyCount(4)
     }
 
     //MARK: Helpers
@@ -24,8 +25,7 @@ class FullScreenImageController: UIViewController {
         view.addSubview(fullScreen)
         fullScreen.center(inView: view)
         fullScreen.isUserInteractionEnabled = true
-        let url = URL(string: friendImages[startFromImage].sizes[4].url)
-        fullScreen.sd_setImage(with: url)
+        
         let gesture = UIPanGestureRecognizer(target: self, action: #selector(gestureAction(recognizer:)))
         fullScreen.addGestureRecognizer(gesture)
     }

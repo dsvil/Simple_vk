@@ -6,11 +6,19 @@
 //
 
 import UIKit
+import RealmSwift
 
 class MainTabControllerViewController: UITabBarController {
 
     //MARK: Properties
-    
+    let actionButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.tintColor = .white
+        button.backgroundColor = .red
+        button.setImage(UIImage(named: "baseline_arrow_back_white_24dp"), for: .normal)
+        button.addTarget(self, action: #selector(actionButtonTapped), for: .touchUpInside)
+        return button
+    }()
     
     //MARK: Lifestyle
     
@@ -18,9 +26,12 @@ class MainTabControllerViewController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .black
+        view.addSubview(actionButton)
+        actionButton.anchor(bottom: view.safeAreaLayoutGuide.bottomAnchor, right: view.rightAnchor,
+                paddingBottom: 64, paddingRight: 16, width: 40, height: 40)
+        actionButton.layer.cornerRadius = 40 / 2
         configureViewControllers()
-        
-        
+        Realm.Configuration.defaultConfiguration = Realm.Configuration(deleteRealmIfMigrationNeeded: true)
     }
     
     //MARK: Helpers
@@ -42,6 +53,13 @@ class MainTabControllerViewController: UITabBarController {
         let nav = TransitionNavigationController(rootViewController: rootViewController)
         nav.tabBarItem.image = image
         return nav
+    }
+    
+    @objc func actionButtonTapped() {
+        let controller = LogInController()
+        controller.revoke = 1
+        controller.modalPresentationStyle = .fullScreen
+        present(controller, animated: true, completion: nil)
     }
 
 }

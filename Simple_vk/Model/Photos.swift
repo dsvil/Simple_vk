@@ -24,7 +24,6 @@ class PhotoStaff: Object, Decodable {
     override static func primaryKey() -> String? {
         return "id"
     }
-    
 }
 
 class GetUrl: Object, Decodable {

@@ -30,6 +30,19 @@ class FriendPhotoController: UICollectionViewController {
         }
         configureUI()
     }
+    func loadData() {
+        do {
+            let realm = try Realm()
+            let realmPhotos = realm.objects(PhotoStaff.self)
+//            self.friends = Array(realmFriends)
+            collectionView.reloadData()
+
+
+        } catch {
+            print(error)
+        }
+    }
+    
 
 
     // MARK: UICollectionViewDataSource

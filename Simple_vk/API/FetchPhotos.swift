@@ -45,7 +45,7 @@ class ApiGetPhotosVK {
         do {
             let realm = try Realm()
             realm.beginWrite()
-            realm.add(items)
+            realm.add(items, update: .modified)
             try realm.commitWrite()
         } catch {
             print(error)

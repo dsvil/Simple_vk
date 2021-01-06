@@ -14,7 +14,7 @@ class ApiGetPhotosVK {
     private let baseUrl = "https://api.vk.com/method/"
     private let version = "5.126"
 
-    func getData(user: Int?, completion: @escaping ([PhotoStaff]) -> Void) {
+    func getData(user: Int?, completion: @escaping () -> Void) {
         let request = "photos.get"
         guard let apiKey = Session.instance.token else {
             return
@@ -33,8 +33,10 @@ class ApiGetPhotosVK {
             }
             do {
                 let photos = try JSONDecoder().decode(ResponsePh.self, from: data)
+                guard let user = user else {return}
+                photos.response.items.forEach{$0.friendId = user}
                 self.savePhotosData(photos.response.items)
-                completion(photos.response.items)
+                completion()
             } catch {
                 print(error)
             }

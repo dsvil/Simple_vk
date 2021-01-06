@@ -25,19 +25,19 @@ class FriendPhotoController: UICollectionViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        ApiGetPhotosVK.shared.getData(user: friendsId) { [self](photos) in
-            self.photos = photos
+        loadData(user: friendsId)
+        
+        ApiGetPhotosVK.shared.getData(user: friendsId) { [weak self] in
+            guard let friendId = self?.friendsId else {return}
+            self?.loadData(user: friendId)
         }
         configureUI()
     }
-    func loadData() {
+    func loadData(user: Int) {
         do {
             let realm = try Realm()
-            let realmPhotos = realm.objects(PhotoStaff.self)
-//            self.friends = Array(realmFriends)
-            collectionView.reloadData()
-
-
+            let realmPhotos = realm.objects(PhotoStaff.self).filter("friendId == %@", user)
+            self.photos = Array(realmPhotos)
         } catch {
             print(error)
         }

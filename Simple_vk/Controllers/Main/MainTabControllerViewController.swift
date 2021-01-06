@@ -31,7 +31,7 @@ class MainTabControllerViewController: UITabBarController {
                 paddingBottom: 64, paddingRight: 16, width: 40, height: 40)
         actionButton.layer.cornerRadius = 40 / 2
         configureViewControllers()
-//        Realm.Configuration.defaultConfiguration = Realm.Configuration(deleteRealmIfMigrationNeeded: true)
+        Realm.Configuration.defaultConfiguration = Realm.Configuration(deleteRealmIfMigrationNeeded: true)
     }
     
     //MARK: Helpers

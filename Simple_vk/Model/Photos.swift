@@ -16,6 +16,7 @@ class DatablePh: Decodable {
 class PhotoStaff: Object, Decodable {
     @objc dynamic var id: Int = 0
     var sizes = List<GetUrl>()
+    @objc dynamic var friendId: Int = 0
    
     enum CodingKeys: String, CodingKey {
         case id
@@ -24,6 +25,9 @@ class PhotoStaff: Object, Decodable {
     override static func primaryKey() -> String? {
         return "id"
     }
+    
+    
+    
 }
 
 class GetUrl: Object, Decodable {

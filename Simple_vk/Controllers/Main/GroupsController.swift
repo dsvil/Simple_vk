@@ -11,23 +11,23 @@ import RealmSwift
 private let reuseIdentifier = "GroupsCell"
 
 class GroupsController: UITableViewController, UISearchResultsUpdating {
-    
+
 
     // MARK: Properties
     private var fullGroups = [VkGroup]()
-    
+
     private var groups = [VkGroup]()
 
     let searchController = UISearchController(searchResultsController: nil)
-    
+
     // MARK: Lifestyle
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         loadData()
-        
+
         configureUI()
-        ApiGetGroupsVK.shared.getData {[weak self] in
+        ApiGetGroupsVK.shared.getData { [weak self] in
             self?.loadData()
         }
     }
@@ -45,7 +45,7 @@ class GroupsController: UITableViewController, UISearchResultsUpdating {
         cell.group = groups[indexPath.row]
         return cell
     }
-    
+
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             groups.remove(at: indexPath.row)
@@ -53,12 +53,13 @@ class GroupsController: UITableViewController, UISearchResultsUpdating {
             tableView.deleteRows(at: [indexPath], with: .middle)
         }
     }
-    
+
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let newGroup = groups[indexPath.row]
         if tableView.tableHeaderView == searchController.searchBar {
-            if  !fullGroups.contains(where: { fullGroups -> Bool in
-                                        newGroup.name ==  fullGroups.name}) {
+            if !fullGroups.contains(where: { fullGroups -> Bool in
+                newGroup.name == fullGroups.name
+            }) {
                 fullGroups.append(newGroup)
                 groups = fullGroups
                 tableView.tableHeaderView = nil
@@ -66,12 +67,12 @@ class GroupsController: UITableViewController, UISearchResultsUpdating {
             }
             groups = fullGroups
             tableView.tableHeaderView = nil
-            tableView.reloadData() }
-        else {
+            tableView.reloadData()
+        } else {
             print("Action Code here!!!")
         }
     }
-    
+
     //MARK: Search
 
     func updateSearchResults(for searchController: UISearchController) {
@@ -85,6 +86,7 @@ class GroupsController: UITableViewController, UISearchResultsUpdating {
             }
         }
     }
+
     //MARK: Helpers
 
     func configureUI() {
@@ -94,7 +96,7 @@ class GroupsController: UITableViewController, UISearchResultsUpdating {
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .search,
                 target: self, action: #selector(openSearchGroups))
     }
-    
+
     func loadData() {
         do {
             let realm = try Realm()
@@ -106,8 +108,8 @@ class GroupsController: UITableViewController, UISearchResultsUpdating {
             print(error)
         }
     }
-    
-    
+
+
     //MARK: Selectors
     @objc func openSearchGroups() {
         searchController.searchResultsUpdater = self

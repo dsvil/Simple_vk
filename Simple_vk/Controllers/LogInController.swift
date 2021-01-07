@@ -15,7 +15,7 @@ class LogInController: UIViewController {
     var revoke = 0
 
     //MARK: Lifestyle
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .black
@@ -34,7 +34,7 @@ class LogInController: UIViewController {
     }
 
     //MARK: API
-    func loginRequest () {
+    func loginRequest() {
         var urlComponents = URLComponents()
         urlComponents.scheme = "https"
         urlComponents.host = "oauth.vk.com"

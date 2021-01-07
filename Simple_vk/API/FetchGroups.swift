@@ -31,7 +31,7 @@ final class ApiGetGroupsVK {
         ]
         let url = baseUrl + request
         AF.request(url, method: .get, parameters:
-                    parameters).responseData { [self] response in
+        parameters).responseData { [self] response in
             guard let data = response.value else {
                 return
             }

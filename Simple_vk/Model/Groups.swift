@@ -24,10 +24,12 @@ class VkGroup: Object, Decodable {
         case name
         case icon = "photo_50"
     }
+
     override static func primaryKey() -> String? {
         return "id"
-}
+    }
+
     override static func indexedProperties() -> [String] {
-         return ["name"]
- }
+        return ["name"]
+    }
 }

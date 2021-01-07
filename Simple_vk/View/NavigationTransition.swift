@@ -10,6 +10,7 @@ class TransitionNavigationController: UINavigationController {
         super.viewDidLoad()
         self.delegate = self
     }
+
     let interactiveTransition = CustomInteractiveTransition()
 }
 
@@ -17,7 +18,8 @@ extension TransitionNavigationController: UINavigationControllerDelegate {
     func navigationController(_ navigationController: UINavigationController, interactionControllerFor animationController:
             UIViewControllerAnimatedTransitioning)
                     -> UIViewControllerInteractiveTransitioning? {
-        return interactiveTransition.hasStarted ? interactiveTransition : nil }
+        return interactiveTransition.hasStarted ? interactiveTransition : nil
+    }
 
 
     func navigationController(_ navigationController: UINavigationController, animationControllerFor operation:
@@ -47,8 +49,12 @@ final class CustomPushAnimatorX: NSObject, UIViewControllerAnimatedTransitioning
     }
 
     func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
-        guard let source = transitionContext.viewController(forKey: .from) else { return }
-        guard let destination = transitionContext.viewController(forKey: .to) else { return }
+        guard let source = transitionContext.viewController(forKey: .from) else {
+            return
+        }
+        guard let destination = transitionContext.viewController(forKey: .to) else {
+            return
+        }
 
         transitionContext.containerView.addSubview(destination.view)
         destination.view.frame = source.view.frame
@@ -65,7 +71,7 @@ final class CustomPushAnimatorX: NSObject, UIViewControllerAnimatedTransitioning
                             withRelativeStartTime: 0,
                             relativeDuration: 0.75,
                             animations: {
-                                let translation = CGAffineTransform(translationX: -100,y: 300)
+                                let translation = CGAffineTransform(translationX: -100, y: 300)
                                 let scale = CGAffineTransform(scaleX: 0.8, y: 0.8)
                                 source.view.transform = translation.concatenating(scale)
                             })
@@ -90,15 +96,19 @@ final class CustomPopAnimatorX: NSObject, UIViewControllerAnimatedTransitioning 
     }
 
     func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
-        guard let source = transitionContext.viewController(forKey: .from) else { return }
-        guard let destination = transitionContext.viewController(forKey: .to) else { return }
+        guard let source = transitionContext.viewController(forKey: .from) else {
+            return
+        }
+        guard let destination = transitionContext.viewController(forKey: .to) else {
+            return
+        }
 
         transitionContext.containerView.addSubview(destination.view)
         transitionContext.containerView.sendSubviewToBack(destination.view)
 
         destination.view.frame = source.view.frame
 
-        let translation = CGAffineTransform(translationX: -100,y: 300)
+        let translation = CGAffineTransform(translationX: -100, y: 300)
         let scale = CGAffineTransform(scaleX: 0.8, y: 0.8)
         destination.view.transform = translation.concatenating(scale)
 
@@ -111,7 +121,7 @@ final class CustomPopAnimatorX: NSObject, UIViewControllerAnimatedTransitioning 
                             relativeDuration: 0.4,
                             animations: {
                                 let translate = CGAffineTransform(translationX: 150, y: source.view.frame.width + 200)
-                                let rotate = CGAffineTransform(rotationAngle: -.pi/2)
+                                let rotate = CGAffineTransform(rotationAngle: -.pi / 2)
                                 source.view.transform = translate.concatenating(rotate)
                             })
                     UIView.addKeyframe(
@@ -143,6 +153,7 @@ class CustomInteractiveTransition: UIPercentDrivenInteractiveTransition {
     }
     var hasStarted: Bool = false
     var shouldFinish: Bool = false
+
     @objc func handleScreenEdgeGesture(_ recognizer: UIScreenEdgePanGestureRecognizer) {
         switch recognizer.state {
         case .began:
@@ -151,7 +162,7 @@ class CustomInteractiveTransition: UIPercentDrivenInteractiveTransition {
         case .changed:
             let translation = recognizer.translation(in: recognizer.view)
             let relativeTranslation = translation.x /
-                    ( (recognizer.view?.bounds.width ?? 1) / 10 )
+                    ((recognizer.view?.bounds.width ?? 1) / 10)
             let progress = max(0, min(1, relativeTranslation))
             self.shouldFinish = progress > 0.15
             self.update(progress)

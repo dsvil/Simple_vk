@@ -6,20 +6,21 @@
 //
 
 import UIKit
+
 private let reuseIdentifier = "NewsCell"
+
 class NewsController: UITableViewController {
-    
+
     //MARK: Properties
-    
-    
-    
+
+
     //MARK: Lifestyle
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        view.backgroundColor = .black
         tableView.register(NewsCell.self, forCellReuseIdentifier: reuseIdentifier)
-        tableView.backgroundColor = .white
+        tableView.backgroundColor = .black
         ApiGetNewsVK.shared.getData()
     }
 
@@ -33,13 +34,13 @@ class NewsController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(
-            withIdentifier: reuseIdentifier,
-            for: indexPath) as! NewsCell
+                withIdentifier: reuseIdentifier,
+                for: indexPath) as! NewsCell
 
         return cell
     }
-    
-    
+
+
 }
 
 

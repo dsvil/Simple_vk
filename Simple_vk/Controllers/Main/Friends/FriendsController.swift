@@ -19,7 +19,7 @@ class FriendsController: UITableViewController, UISearchResultsUpdating {
 
     var undeletedFriends = [VkFriend]()
     var charactersBeforeSearch = [Character]()
-    var sortedFriendsBeforeSearch : [Character: [VkFriend]] = [:]
+    var sortedFriendsBeforeSearch: [Character: [VkFriend]] = [:]
 
     var filteredFirstCharacters = [Character]()
     var filteredSortedFriends: [Character: [VkFriend]] = [:]
@@ -35,6 +35,7 @@ class FriendsController: UITableViewController, UISearchResultsUpdating {
             self?.loadData()
         }
     }
+
     func loadData() {
         do {
             let realm = try Realm()
@@ -84,6 +85,7 @@ class FriendsController: UITableViewController, UISearchResultsUpdating {
         cell.friend = char![indexPath.row]
         return cell
     }
+
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             let character = filteredFirstCharacters[indexPath.section]
@@ -132,7 +134,8 @@ class FriendsController: UITableViewController, UISearchResultsUpdating {
 
     func updateSearchResults(for searchController: UISearchController) {
         var text = searchController.searchBar.text
-        if text!.isEmpty {
+        guard let textInSearch = text else { return }
+        if textInSearch.isEmpty {
             text = ""
             filteredFirstCharacters = charactersBeforeSearch
             filteredSortedFriends = sortedFriendsBeforeSearch
@@ -142,11 +145,11 @@ class FriendsController: UITableViewController, UISearchResultsUpdating {
             var filteredFriends = [VkFriend]()
             if undeletedFriends.isEmpty {
                 filteredFriends = friends.filter { friend in
-                    friend.firstName.lowercased().contains(text!.lowercased()) || friend.lastName.lowercased().contains(text!.lowercased())
+                    friend.firstName.lowercased().contains(textInSearch.lowercased()) || friend.lastName.lowercased().contains(textInSearch.lowercased())
                 }
             } else {
                 filteredFriends = undeletedFriends.filter { friend in
-                    friend.firstName.lowercased().contains(text!.lowercased()) || friend.lastName.lowercased().contains(text!.lowercased())
+                    friend.firstName.lowercased().contains(textInSearch.lowercased()) || friend.lastName.lowercased().contains(textInSearch.lowercased())
                 }
             }
             (filteredFirstCharacters, filteredSortedFriends) = sort(filteredFriends)
@@ -165,6 +168,7 @@ class FriendsController: UITableViewController, UISearchResultsUpdating {
         tableView.backgroundColor = .black
         navigationItem.title = "Friends"
     }
+
     func sort(_ friends: [VkFriend]) -> (characters: [Character], sortedFriends: [Character: [VkFriend]]) {
         var characters = [Character]()
         var sortedFriends = [Character: [VkFriend]]()
@@ -183,6 +187,4 @@ class FriendsController: UITableViewController, UISearchResultsUpdating {
         characters.sort()
         return (characters, sortedFriends)
     }
-
-
 }

@@ -19,10 +19,10 @@ class MainTabControllerViewController: UITabBarController {
         button.addTarget(self, action: #selector(actionButtonTapped), for: .touchUpInside)
         return button
     }()
-    
+
     //MARK: Lifestyle
-    
-    
+
+
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .black
@@ -31,30 +31,30 @@ class MainTabControllerViewController: UITabBarController {
                 paddingBottom: 64, paddingRight: 16, width: 40, height: 40)
         actionButton.layer.cornerRadius = 40 / 2
         configureViewControllers()
-        Realm.Configuration.defaultConfiguration = Realm.Configuration(deleteRealmIfMigrationNeeded: true)
+//        Realm.Configuration.defaultConfiguration = Realm.Configuration(deleteRealmIfMigrationNeeded: true)
     }
-    
+
     //MARK: Helpers
     func configureViewControllers() {
-      
+
         let friends = FriendsController()
         let navFriends = templateNavController(image: UIImage(systemName: "person.2"), rootViewController: friends)
-        
+
         let groups = GroupsController()
         let navGroups = templateNavController(image: UIImage(systemName: "person.3.fill"), rootViewController: groups)
-      
+
         let news = NewsController()
         let navNews = templateNavController(image: UIImage(systemName: "newspaper"), rootViewController: news)
 
         viewControllers = [navFriends, navGroups, navNews]
     }
-    
+
     func templateNavController(image: UIImage?, rootViewController: UIViewController) -> UINavigationController {
         let nav = TransitionNavigationController(rootViewController: rootViewController)
         nav.tabBarItem.image = image
         return nav
     }
-    
+
     @objc func actionButtonTapped() {
         let controller = LogInController()
         controller.revoke = 1

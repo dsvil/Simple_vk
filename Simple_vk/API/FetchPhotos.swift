@@ -33,8 +33,12 @@ class ApiGetPhotosVK {
             }
             do {
                 let photos = try JSONDecoder().decode(ResponsePh.self, from: data)
-                guard let user = user else {return}
-                photos.response.items.forEach{$0.friendId = user}
+                guard let user = user else {
+                    return
+                }
+                photos.response.items.forEach {
+                    $0.friendId = user
+                }
                 self.savePhotosData(photos.response.items)
                 completion()
             } catch {

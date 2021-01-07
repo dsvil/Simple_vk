@@ -13,7 +13,7 @@ class AnimView: UIView {
         heightConstraint.isActive = true
         backgroundColor = .twitterBlue
     }
-    
+
     override func layoutSubviews() {
         super.layoutSubviews()
         layer.cornerRadius = bounds.height / 2
@@ -35,6 +35,7 @@ class AnimView: UIView {
         layer.add(animation, forKey: nil)
     }
 }
+
 class AnimViewImage: UIImageView {
     func sizeSetUP(side: CGFloat) {
         widthAnchor.constraint(equalToConstant: side).isActive = true
@@ -45,6 +46,7 @@ class AnimViewImage: UIImageView {
         clipsToBounds = true
         backgroundColor = .white
     }
+
     override func layoutSubviews() {
         super.layoutSubviews()
         layer.cornerRadius = bounds.height / 2

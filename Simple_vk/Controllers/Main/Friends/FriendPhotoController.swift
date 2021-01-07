@@ -19,20 +19,23 @@ class FriendPhotoController: UICollectionViewController {
             collectionView.reloadData()
         }
     }
-    
+
 
     //MARK: Lifestyle
 
     override func viewDidLoad() {
         super.viewDidLoad()
         loadData(user: friendsId)
-        
+
         ApiGetPhotosVK.shared.getData(user: friendsId) { [weak self] in
-            guard let friendId = self?.friendsId else {return}
+            guard let friendId = self?.friendsId else {
+                return
+            }
             self?.loadData(user: friendId)
         }
         configureUI()
     }
+
     func loadData(user: Int) {
         do {
             let realm = try Realm()
@@ -42,7 +45,6 @@ class FriendPhotoController: UICollectionViewController {
             print(error)
         }
     }
-    
 
 
     // MARK: UICollectionViewDataSource
@@ -60,13 +62,11 @@ class FriendPhotoController: UICollectionViewController {
     }
 
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        DispatchQueue.main.async {
             let controller = FullScreenImageController()
             controller.startFromImage = indexPath.row
-            controller.friendImages = self.photos
+            controller.friendImages = photos
             controller.modalPresentationStyle = .fullScreen
-            self.present(controller, animated: true)
-        }
+            present(controller, animated: true)
     }
 
     // MARK: Helpers

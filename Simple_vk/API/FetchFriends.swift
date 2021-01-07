@@ -39,6 +39,7 @@ final class ApiGetFriendsVK {
             }
         }
     }
+
     private func saveMyFriendsData(_ items: [VkFriend]) {
         do {
             let realm = try Realm()

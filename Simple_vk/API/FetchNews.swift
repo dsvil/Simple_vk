@@ -12,13 +12,16 @@ class ApiGetNewsVK {
     static let shared = ApiGetNewsVK()
     let baseUrl = "https://api.vk.com/method/"
     let version = "5.126"
-    func getData(){
+
+    func getData() {
         let request = "wall.get"
 //        let request = "newsfeed.get"
         guard let user = Session.instance.userId else {
             return
         }
-        guard let apiKey = Session.instance.token else {return}
+        guard let apiKey = Session.instance.token else {
+            return
+        }
         let parameters: Parameters = [
             "user_ids": user,
             "owner_id": user,
@@ -28,10 +31,10 @@ class ApiGetNewsVK {
             "access_token": apiKey,
             "v": version
         ]
-        let url = baseUrl+request
+        let url = baseUrl + request
         AF.request(url, method: .get, parameters:
-                    parameters).responseJSON { repsonse in
+        parameters).responseJSON { repsonse in
 //                        print(repsonse.value!)
-                    }
+        }
     }
 }

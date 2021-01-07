@@ -7,6 +7,9 @@ import Foundation
 final class Session {
     var token: String?
     var userId: Int?
-    private init(){}
+
+    private init() {
+    }
+
     static let instance = Session()
 }

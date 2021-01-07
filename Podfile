@@ -4,9 +4,12 @@
 target 'Simple_vk' do
 
   use_frameworks!
-
   pod 'Alamofire'
-pod 'RealmSwift'
+  pod 'RealmSwift'
   pod 'SDWebImage'
+  pod 'Firebase/Core'
+  pod 'Firebase/Database'
+  pod 'Firebase/Storage'
+  pod 'Firebase/Auth'
 
 end

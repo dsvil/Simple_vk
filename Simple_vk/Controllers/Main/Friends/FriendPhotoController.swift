@@ -40,7 +40,7 @@ class FriendPhotoController: UICollectionViewController {
         do {
             let realm = try Realm()
             let realmPhotos = realm.objects(PhotoStaff.self).filter("friendId == %@", user)
-            self.photos = Array(realmPhotos)
+            photos = Array(realmPhotos)
         } catch {
             print(error)
         }
@@ -52,7 +52,7 @@ class FriendPhotoController: UICollectionViewController {
 
     override func collectionView(_ collectionView: UICollectionView,
                                  numberOfItemsInSection section: Int) -> Int {
-        return photos.count
+        photos.count
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {

@@ -17,15 +17,14 @@ class FriendsController: UITableViewController, UISearchResultsUpdating {
     private var friends = [VkFriend]()
     let searchController = UISearchController(searchResultsController: nil)
 
-    var undeletedFriends = [VkFriend]()
-    var charactersBeforeSearch = [Character]()
-    var sortedFriendsBeforeSearch: [Character: [VkFriend]] = [:]
+    private var undeletedFriends = [VkFriend]()
+    private var charactersBeforeSearch = [Character]()
+    private var sortedFriendsBeforeSearch: [Character: [VkFriend]] = [:]
 
-    var filteredFirstCharacters = [Character]()
-    var filteredSortedFriends: [Character: [VkFriend]] = [:]
+    private var filteredFirstCharacters = [Character]()
+    private var filteredSortedFriends: [Character: [VkFriend]] = [:]
 
     // MARK: Lifestyle
-
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,7 +39,7 @@ class FriendsController: UITableViewController, UISearchResultsUpdating {
         do {
             let realm = try Realm()
             let realmFriends = realm.objects(VkFriend.self)
-            self.friends = Array(realmFriends)
+            friends = Array(realmFriends)
             (filteredFirstCharacters, filteredSortedFriends) = sort(friends)
             (charactersBeforeSearch, sortedFriendsBeforeSearch) = sort(friends)
             tableView.reloadData()
@@ -51,23 +50,25 @@ class FriendsController: UITableViewController, UISearchResultsUpdating {
 
     // MARK: - Table view data source
 
-    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        let character = filteredFirstCharacters[section]
-        return String(character)
-    }
-
     override func numberOfSections(in tableView: UITableView) -> Int {
         filteredFirstCharacters.count
     }
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let view = UIView(frame: CGRect(x: 0, y: 0, width: tableView.bounds.width, height: 40))
-        view.backgroundColor = UIColor.red
-        let label = UILabel(frame: CGRect(x: 15, y: -10, width: tableView.bounds.width - 30, height: 49))
-        label.font = UIFont.boldSystemFont(ofSize: 20)
-        label.textColor = UIColor.white
         let character = filteredFirstCharacters[section]
-        label.text = String(character)
+
+        let view: UIView = {
+            let view = UIView(frame: CGRect(x: 0, y: 0, width: tableView.bounds.width, height: 40))
+            view.backgroundColor = UIColor.red
+            return view
+        }()
+        let label: UILabel = {
+            let label = UILabel(frame: CGRect(x: 15, y: -10, width: tableView.bounds.width - 30, height: 49))
+            label.font = UIFont.boldSystemFont(ofSize: 20)
+            label.textColor = UIColor.white
+            label.text = String(character)
+            return label
+        }()
         view.addSubview(label)
         return view
     }

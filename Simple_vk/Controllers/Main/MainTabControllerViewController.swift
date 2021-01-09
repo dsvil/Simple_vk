@@ -25,16 +25,21 @@ class MainTabControllerViewController: UITabBarController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .black
-        view.addSubview(actionButton)
-        actionButton.anchor(bottom: view.safeAreaLayoutGuide.bottomAnchor, right: view.rightAnchor,
-                paddingBottom: 64, paddingRight: 16, width: 40, height: 40)
-        actionButton.layer.cornerRadius = 40 / 2
+        configureUI()
         configureViewControllers()
 //        Realm.Configuration.defaultConfiguration = Realm.Configuration(deleteRealmIfMigrationNeeded: true)
     }
 
     //MARK: Helpers
+    func configureUI() {
+        view.backgroundColor = .black
+        view.addSubview(actionButton)
+        actionButton.anchor(bottom: view.safeAreaLayoutGuide.bottomAnchor, right: view.rightAnchor,
+                paddingBottom: 64, paddingRight: 16, width: 40, height: 40)
+        actionButton.layer.cornerRadius = 40 / 2
+    }
+
+
     func configureViewControllers() {
 
         let friends = FriendsController()

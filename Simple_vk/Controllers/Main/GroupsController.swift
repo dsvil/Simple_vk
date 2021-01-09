@@ -10,15 +10,14 @@ import RealmSwift
 
 private let reuseIdentifier = "GroupsCell"
 
-class GroupsController: UITableViewController, UISearchResultsUpdating {
-
+class GroupsController: UITableViewController  {
 
     // MARK: Properties
     private var fullGroups = [VkGroup]()
-
     private var groups = [VkGroup]()
 
-    let searchController = UISearchController(searchResultsController: nil)
+//    let searchController = UISearchController(searchResultsController: nil)
+//        UISearchResultsUpdating
 
     // MARK: Lifestyle
 
@@ -36,8 +35,7 @@ class GroupsController: UITableViewController, UISearchResultsUpdating {
 
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-
-        return groups.count
+        groups.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -55,37 +53,38 @@ class GroupsController: UITableViewController, UISearchResultsUpdating {
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let newGroup = groups[indexPath.row]
-        if tableView.tableHeaderView == searchController.searchBar {
-            if !fullGroups.contains(where: { fullGroups -> Bool in
-                newGroup.name == fullGroups.name
-            }) {
-                fullGroups.append(newGroup)
-                groups = fullGroups
-                tableView.tableHeaderView = nil
-                tableView.reloadData()
-            }
-            groups = fullGroups
-            tableView.tableHeaderView = nil
-            tableView.reloadData()
-        } else {
-            print("Action Code here!!!")
-        }
+//        let newGroup = groups[indexPath.row]
+//        if tableView.tableHeaderView == searchController.searchBar {
+//            if !fullGroups.contains(where: { fullGroups -> Bool in
+//                newGroup.name == fullGroups.name
+//            }) {
+//                fullGroups.append(newGroup)
+//                groups = fullGroups
+//                tableView.tableHeaderView = nil
+//                tableView.reloadData()
+//            }
+//            groups = fullGroups
+//            tableView.tableHeaderView = nil
+//            tableView.reloadData()
+//        } else {
+//            print("Action Code here!!!")
+//        }
+        print("DEBUG: Action Code here!!!")
     }
 
     //MARK: Search
 
-    func updateSearchResults(for searchController: UISearchController) {
-        var text = searchController.searchBar.text
-        if text!.isEmpty {
-            text = ""
-        } else {
-            ApiGetGroupsVKSearch.shared.getData(searchText: text!) { [self]groups in
-                self.groups = groups
-                tableView.reloadData()
-            }
-        }
-    }
+//    func updateSearchResults(for searchController: UISearchController) {
+//        var text = searchController.searchBar.text
+//        if text!.isEmpty {
+//            text = ""
+//        } else {
+//            ApiGetGroupsVKSearch.shared.getData(searchText: text!) { [self]groups in
+//                self.groups = groups
+//                tableView.reloadData()
+//            }
+//        }
+//    }
 
     //MARK: Helpers
 
@@ -96,13 +95,12 @@ class GroupsController: UITableViewController, UISearchResultsUpdating {
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .search,
                 target: self, action: #selector(openSearchGroups))
     }
-
     func loadData() {
         do {
             let realm = try Realm()
             let realmGroups = realm.objects(VkGroup.self).sorted(byKeyPath: "name")
-            self.groups = Array(realmGroups)
-            self.fullGroups = groups
+            groups = Array(realmGroups)
+            fullGroups = groups
             tableView.reloadData()
         } catch {
             print(error)
@@ -112,11 +110,11 @@ class GroupsController: UITableViewController, UISearchResultsUpdating {
 
     //MARK: Selectors
     @objc func openSearchGroups() {
-        searchController.searchResultsUpdater = self
-        searchController.automaticallyShowsCancelButton = false
-        searchController.hidesNavigationBarDuringPresentation = false
-        tableView.tableHeaderView = searchController.searchBar
-
+//        searchController.searchResultsUpdater = self
+//        searchController.automaticallyShowsCancelButton = false
+//        searchController.hidesNavigationBarDuringPresentation = false
+//        tableView.tableHeaderView = searchController.searchBar
+    print("DEBUG: Going to search")
     }
 }
 

@@ -10,7 +10,7 @@ final class ApiGetFriendsVK {
     private let baseUrl = "https://api.vk.com/method/"
     private let version = "5.126"
 
-    func getData(completion: @escaping () -> Void) {
+    func getData() {
         let request = "friends.get"
         guard let user = Session.instance.userId else {
             return
@@ -33,7 +33,6 @@ final class ApiGetFriendsVK {
             do {
                 let friends = try JSONDecoder().decode(ResponseFd.self, from: data)
                 self.saveMyFriendsData(friends.response.items)
-                completion()
             } catch {
                 print(error)
             }

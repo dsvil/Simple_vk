@@ -10,83 +10,53 @@ import RealmSwift
 
 private let reuseIdentifier = "GroupsCell"
 
-class GroupsController: UITableViewController  {
+class GroupsController: UITableViewController {
 
-    // MARK: Properties
-    private var fullGroups = [VkGroup]()
-    private var groups = [VkGroup]()
+    // MARK: - Properties
+    private var token: NotificationToken?
+    private var groups: Results<VkGroup>?
 
-//    let searchController = UISearchController(searchResultsController: nil)
-//        UISearchResultsUpdating
-
-    // MARK: Lifestyle
+    // MARK: - Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
         loadData()
-
         configureUI()
-        ApiGetGroupsVK.shared.getData { [weak self] in
-            self?.loadData()
-        }
+        ApiGetGroupsVK.shared.getData()
     }
 
     // MARK: - Table view data source
 
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        groups.count
+        groups?.count ?? 0
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath) as! SetUpCell
-        cell.group = groups[indexPath.row]
+        cell.group = groups![indexPath.row]
         return cell
     }
 
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        let group = groups![indexPath.row]
         if editingStyle == .delete {
-            groups.remove(at: indexPath.row)
-            fullGroups.remove(at: indexPath.row)
-            tableView.deleteRows(at: [indexPath], with: .middle)
+            do {
+                let realm = try Realm()
+                realm.beginWrite()
+                realm.delete(group)
+                try realm.commitWrite()
+            } catch {
+                print(error)
+            }
         }
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        let newGroup = groups[indexPath.row]
-//        if tableView.tableHeaderView == searchController.searchBar {
-//            if !fullGroups.contains(where: { fullGroups -> Bool in
-//                newGroup.name == fullGroups.name
-//            }) {
-//                fullGroups.append(newGroup)
-//                groups = fullGroups
-//                tableView.tableHeaderView = nil
-//                tableView.reloadData()
-//            }
-//            groups = fullGroups
-//            tableView.tableHeaderView = nil
-//            tableView.reloadData()
-//        } else {
-//            print("Action Code here!!!")
-//        }
         print("DEBUG: Action Code here!!!")
     }
 
-    //MARK: Search
-
-//    func updateSearchResults(for searchController: UISearchController) {
-//        var text = searchController.searchBar.text
-//        if text!.isEmpty {
-//            text = ""
-//        } else {
-//            ApiGetGroupsVKSearch.shared.getData(searchText: text!) { [self]groups in
-//                self.groups = groups
-//                tableView.reloadData()
-//            }
-//        }
-//    }
-
-    //MARK: Helpers
+//MARK: - Helpers
 
     func configureUI() {
         tableView.register(SetUpCell.self, forCellReuseIdentifier: reuseIdentifier)
@@ -95,26 +65,37 @@ class GroupsController: UITableViewController  {
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .search,
                 target: self, action: #selector(openSearchGroups))
     }
+
     func loadData() {
         do {
             let realm = try Realm()
-            let realmGroups = realm.objects(VkGroup.self).sorted(byKeyPath: "name")
-            groups = Array(realmGroups)
-            fullGroups = groups
-            tableView.reloadData()
+            groups = realm.objects(VkGroup.self).sorted(byKeyPath: "name")
+            token = groups!.observe { [weak self] (changes: RealmCollectionChange) in
+                guard let tableView = self?.tableView else {
+                    return
+                }
+                switch changes {
+                case .initial:
+                    tableView.reloadData()
+                case .update(_, let deletions, let insertions, let modifications):
+                    tableView.beginUpdates()
+                    tableView.insertRows(at: insertions.map({ IndexPath(row: $0, section: 0) }), with: .automatic)
+                    tableView.deleteRows(at: deletions.map({ IndexPath(row: $0, section: 0) }), with: .automatic)
+                    tableView.reloadRows(at: modifications.map({ IndexPath(row: $0, section: 0) }), with: .automatic)
+                    tableView.endUpdates()
+                case .error(let error):
+                    fatalError("\(error)")
+                }
+            }
         } catch {
             print(error)
         }
     }
 
-
-    //MARK: Selectors
+//MARK: - Selectors
     @objc func openSearchGroups() {
-//        searchController.searchResultsUpdater = self
-//        searchController.automaticallyShowsCancelButton = false
-//        searchController.hidesNavigationBarDuringPresentation = false
-//        tableView.tableHeaderView = searchController.searchBar
-    print("DEBUG: Going to search")
+        let controller = GroupsSearchController()
+        navigationController?.pushViewController(controller, animated: true)
     }
 }
 

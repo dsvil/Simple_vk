@@ -14,7 +14,7 @@ final class ApiGetGroupsVK {
     private let baseUrl = "https://api.vk.com/method/"
     private let version = "5.126"
 
-    func getData(completion: @escaping () -> Void) {
+    func getData() {
         guard let user = Session.instance.userId else {
             return
         }
@@ -38,7 +38,6 @@ final class ApiGetGroupsVK {
             do {
                 let groups = try JSONDecoder().decode(Response.self, from: data)
                 saveMyGroupsData(groups.response.items)
-                completion()
             } catch {
                 print(error)
             }

@@ -14,12 +14,9 @@ private let reuseIdentifier = "FriendsCell"
 class FriendsController: UITableViewController, UISearchResultsUpdating {
 
     // MARK: Properties
-    private var friends = [VkFriend]()
+    private var friends: Results<VkFriend>?
+    private var token: NotificationToken?
     let searchController = UISearchController(searchResultsController: nil)
-
-    private var undeletedFriends = [VkFriend]()
-    private var charactersBeforeSearch = [Character]()
-    private var sortedFriendsBeforeSearch: [Character: [VkFriend]] = [:]
 
     private var filteredFirstCharacters = [Character]()
     private var filteredSortedFriends: [Character: [VkFriend]] = [:]
@@ -30,22 +27,7 @@ class FriendsController: UITableViewController, UISearchResultsUpdating {
         super.viewDidLoad()
         configureUI()
         loadData()
-        ApiGetFriendsVK.shared.getData { [weak self] in
-            self?.loadData()
-        }
-    }
-
-    func loadData() {
-        do {
-            let realm = try Realm()
-            let realmFriends = realm.objects(VkFriend.self)
-            friends = Array(realmFriends)
-            (filteredFirstCharacters, filteredSortedFriends) = sort(friends)
-            (charactersBeforeSearch, sortedFriendsBeforeSearch) = sort(friends)
-            tableView.reloadData()
-        } catch {
-            print(error)
-        }
+        ApiGetFriendsVK.shared.getData()
     }
 
     // MARK: - Table view data source
@@ -56,7 +38,6 @@ class FriendsController: UITableViewController, UISearchResultsUpdating {
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let character = filteredFirstCharacters[section]
-
         let view: UIView = {
             let view = UIView(frame: CGRect(x: 0, y: 0, width: tableView.bounds.width, height: 40))
             view.backgroundColor = UIColor.red
@@ -87,36 +68,19 @@ class FriendsController: UITableViewController, UISearchResultsUpdating {
         return cell
     }
 
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle,
+                            forRowAt indexPath: IndexPath) {
+        let character = filteredFirstCharacters[indexPath.section]
+        let char = filteredSortedFriends[character]
+        let friend = char![indexPath.row]
         if editingStyle == .delete {
-            let character = filteredFirstCharacters[indexPath.section]
-            let indexSet = IndexSet(arrayLiteral: indexPath.section)
-            filteredSortedFriends[character]!.remove(at: indexPath.row)
-            sortedFriendsBeforeSearch = filteredSortedFriends
-
-            let sectionsToDelete = filteredSortedFriends[character]
-            if sectionsToDelete?.count == 0 {
-                filteredSortedFriends[character] = nil
-                sortedFriendsBeforeSearch = filteredSortedFriends
-                guard let charToDelete = filteredFirstCharacters.firstIndex(of: character) else {
-                    return
-                }
-                filteredFirstCharacters.remove(at: charToDelete)
-                charactersBeforeSearch = filteredFirstCharacters
-
-                for character in filteredFirstCharacters {
-                    for element in filteredSortedFriends[character]! {
-                        undeletedFriends.append(element)
-                    }
-                }
-                tableView.deleteSections(indexSet, with: .left)
-            } else {
-                for character in filteredFirstCharacters {
-                    for element in filteredSortedFriends[character]! {
-                        undeletedFriends.append(element)
-                    }
-                }
-                tableView.deleteRows(at: [indexPath], with: .middle)
+            do {
+                let realm = try Realm()
+                realm.beginWrite()
+                realm.delete(friend)
+                try realm.commitWrite()
+            } catch {
+                print(error)
             }
         }
     }
@@ -135,26 +99,27 @@ class FriendsController: UITableViewController, UISearchResultsUpdating {
 
     func updateSearchResults(for searchController: UISearchController) {
         var text = searchController.searchBar.text
-        guard let textInSearch = text else { return }
+        guard let textInSearch = text else {
+            return
+        }
         if textInSearch.isEmpty {
             text = ""
-            filteredFirstCharacters = charactersBeforeSearch
-            filteredSortedFriends = sortedFriendsBeforeSearch
+            (filteredFirstCharacters, filteredSortedFriends) = sort(friends!)
             view.endEditing(true)
             tableView.reloadData()
         } else {
-            var filteredFriends = [VkFriend]()
-            if undeletedFriends.isEmpty {
-                filteredFriends = friends.filter { friend in
-                    friend.firstName.lowercased().contains(textInSearch.lowercased()) || friend.lastName.lowercased().contains(textInSearch.lowercased())
-                }
-            } else {
-                filteredFriends = undeletedFriends.filter { friend in
-                    friend.firstName.lowercased().contains(textInSearch.lowercased()) || friend.lastName.lowercased().contains(textInSearch.lowercased())
-                }
+            do {
+                let realm = try Realm()
+                let predicate = NSPredicate(format: """
+                                                    lastName CONTAINS[cd] %@ OR 
+                                                    firstName CONTAINS[cd] %@
+                                                    """, textInSearch, textInSearch)
+                let filteredFriends = realm.objects(VkFriend.self).filter(predicate)
+                (filteredFirstCharacters, filteredSortedFriends) = sort(filteredFriends)
+                tableView.reloadData()
+            } catch {
+                print(error)
             }
-            (filteredFirstCharacters, filteredSortedFriends) = sort(filteredFriends)
-            tableView.reloadData()
         }
     }
 
@@ -170,7 +135,31 @@ class FriendsController: UITableViewController, UISearchResultsUpdating {
         navigationItem.title = "Friends"
     }
 
-    func sort(_ friends: [VkFriend]) -> (characters: [Character], sortedFriends: [Character: [VkFriend]]) {
+    func loadData() {
+        do {
+            let realm = try Realm()
+            friends = realm.objects(VkFriend.self)
+            (filteredFirstCharacters, filteredSortedFriends) = sort(friends!)
+            token = friends!.observe { [weak self] (changes: RealmCollectionChange) in
+                guard let tableView = self?.tableView else {
+                    return
+                }
+                switch changes {
+                case .initial:
+                    tableView.reloadData()
+                case .update(_, _, _, _):
+                    (self!.filteredFirstCharacters, self!.filteredSortedFriends) = self!.sort(self!.friends!)
+                    tableView.reloadData()
+                case .error(let error):
+                    fatalError("\(error)")
+                }
+            }
+        } catch {
+            print(error)
+        }
+    }
+
+    func sort(_ friends: Results<VkFriend>) -> (characters: [Character], sortedFriends: [Character: [VkFriend]]) {
         var characters = [Character]()
         var sortedFriends = [Character: [VkFriend]]()
         friends.forEach { friend in

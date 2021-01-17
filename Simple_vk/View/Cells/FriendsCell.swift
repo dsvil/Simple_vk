@@ -1,16 +1,16 @@
 //
-// Created by Sergei Dorozhkin on 30.12.2020.
+// Created by Sergei Dorozhkin on 11.01.2021.
 //
 
+import Foundation
 import UIKit
 
-class SetUpCell: UITableViewCell {
+class FriendsCell: UITableViewCell {
 
     //MARK: Properties
-
-    var group: VkGroup? {
+    var friend: VkFriend? {
         didSet {
-            configureGroupList()
+            configureFriendList()
         }
     }
 
@@ -64,14 +64,13 @@ class SetUpCell: UITableViewCell {
 
 //MARK: Helpers
 
-
-    func configureGroupList() {
-        guard let group = group else {
+    func configureFriendList() {
+        guard let friend = friend else {
             return
         }
-        let viewModel = GroupViewModel(group: group)
+        let viewModel = FriendsViewModel(friend: friend)
         infoLabel.attributedText = viewModel.item
         profileImageView.sd_setImage(with: viewModel.profileImageUrl)
     }
-}
 
+}

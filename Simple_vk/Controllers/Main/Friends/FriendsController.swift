@@ -27,6 +27,7 @@ class FriendsController: UITableViewController, UISearchResultsUpdating {
         super.viewDidLoad()
         configureUI()
         loadData()
+        configureSearchController()
         ApiGetFriendsVK.shared.getData()
     }
 
@@ -61,7 +62,7 @@ class FriendsController: UITableViewController, UISearchResultsUpdating {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath) as! SetUpCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath) as! FriendsCell
         let character = filteredFirstCharacters[indexPath.section]
         let char = filteredSortedFriends[character]
         cell.friend = char![indexPath.row]
@@ -73,11 +74,18 @@ class FriendsController: UITableViewController, UISearchResultsUpdating {
         let character = filteredFirstCharacters[indexPath.section]
         let char = filteredSortedFriends[character]
         let friend = char![indexPath.row]
+        
         if editingStyle == .delete {
             do {
                 let realm = try Realm()
+                let friendPhotos = realm.objects(PhotoStaff.self).filter("friendId == %@", friend.id)
                 realm.beginWrite()
+                friendPhotos.forEach { photo in
+                    realm.delete(photo.sizes)
+                }
                 realm.delete(friend)
+                realm.delete(friendPhotos)
+
                 try realm.commitWrite()
             } catch {
                 print(error)
@@ -98,12 +106,10 @@ class FriendsController: UITableViewController, UISearchResultsUpdating {
     //MARK: Search
 
     func updateSearchResults(for searchController: UISearchController) {
-        var text = searchController.searchBar.text
-        guard let textInSearch = text else {
+        guard let textInSearch = searchController.searchBar.text else {
             return
         }
         if textInSearch.isEmpty {
-            text = ""
             (filteredFirstCharacters, filteredSortedFriends) = sort(friends!)
             view.endEditing(true)
             tableView.reloadData()
@@ -126,13 +132,19 @@ class FriendsController: UITableViewController, UISearchResultsUpdating {
 // MARK: Helpers
 
     func configureUI() {
-        searchController.searchResultsUpdater = self
-        searchController.automaticallyShowsCancelButton = false
-        searchController.hidesNavigationBarDuringPresentation = false
-        tableView.tableHeaderView = searchController.searchBar
-        tableView.register(SetUpCell.self, forCellReuseIdentifier: reuseIdentifier)
+        tableView.register(FriendsCell.self, forCellReuseIdentifier: reuseIdentifier)
         tableView.backgroundColor = .black
         navigationItem.title = "Friends"
+    }
+
+    func configureSearchController() {
+        searchController.automaticallyShowsCancelButton = true
+        searchController.hidesNavigationBarDuringPresentation = false
+        tableView.tableHeaderView = searchController.searchBar
+        searchController.obscuresBackgroundDuringPresentation = false
+        searchController.searchBar.placeholder = "Search..."
+        definesPresentationContext = false
+        searchController.searchResultsUpdater = self
     }
 
     func loadData() {

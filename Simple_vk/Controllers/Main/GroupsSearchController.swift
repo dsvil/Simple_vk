@@ -10,7 +10,11 @@ private let reuseIdentifier = "GroupsCell"
 class GroupsSearchController: UITableViewController, UISearchResultsUpdating {
 
     // MARK: - Properties
-    private var groups = [VkGroup]()
+    private var groups = [VkGroup]() {
+        didSet {
+            tableView.reloadData()
+        }
+    }
     let searchController = UISearchController(searchResultsController: nil)
 
     // MARK: - Lifescycle
@@ -18,6 +22,7 @@ class GroupsSearchController: UITableViewController, UISearchResultsUpdating {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
+        configureSearchController()
     }
 
     // MARK: - Helpers
@@ -25,11 +30,19 @@ class GroupsSearchController: UITableViewController, UISearchResultsUpdating {
         tableView.register(SetUpCell.self, forCellReuseIdentifier: reuseIdentifier)
         tableView.backgroundColor = .black
         navigationItem.title = "Groups Search"
-        searchController.searchResultsUpdater = self
-        searchController.automaticallyShowsCancelButton = false
-        searchController.hidesNavigationBarDuringPresentation = false
-        tableView.tableHeaderView = searchController.searchBar
+
     }
+
+    func configureSearchController() {
+        searchController.obscuresBackgroundDuringPresentation = false
+        searchController.hidesNavigationBarDuringPresentation = false
+        searchController.searchBar.placeholder = "Search..."
+        navigationItem.searchController = searchController
+        definesPresentationContext = false
+        searchController.automaticallyShowsCancelButton = false
+        searchController.searchResultsUpdater = self
+    }
+
 
     func uploadSelectedGroup(_ item: VkGroup) {
         do {
@@ -44,13 +57,12 @@ class GroupsSearchController: UITableViewController, UISearchResultsUpdating {
 
     // MARK: - SearchController
     func updateSearchResults(for searchController: UISearchController) {
-        var text = searchController.searchBar.text
+        let text = searchController.searchBar.text
         if text!.isEmpty {
-            text = ""
+            groups = []
         } else {
             ApiGetGroupsVKSearch.shared.getData(searchText: text!) { [self]groups in
                 self.groups = groups
-                tableView.reloadData()
             }
         }
     }

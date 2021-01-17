@@ -14,11 +14,8 @@ class FriendPhotoController: UICollectionViewController {
 
     //MARK: Properties
     var friendsId = Int()
-    var photos = [PhotoStaff]() {
-        didSet {
-            collectionView.reloadData()
-        }
-    }
+    private var token: NotificationToken?
+    private var photos: Results<PhotoStaff>?
 
 
     //MARK: Lifestyle
@@ -27,46 +24,54 @@ class FriendPhotoController: UICollectionViewController {
         super.viewDidLoad()
         loadData(user: friendsId)
 
-        ApiGetPhotosVK.shared.getData(user: friendsId) { [weak self] in
-            guard let friendId = self?.friendsId else {
-                return
-            }
-            self?.loadData(user: friendId)
-        }
+        ApiGetPhotosVK.shared.getData(user: friendsId)
         configureUI()
     }
 
     func loadData(user: Int) {
         do {
             let realm = try Realm()
-            let realmPhotos = realm.objects(PhotoStaff.self).filter("friendId == %@", user)
-            photos = Array(realmPhotos)
+            photos = realm.objects(PhotoStaff.self).filter("friendId == %@", user)
+            token = photos!.observe { [weak self] (changes: RealmCollectionChange) in
+                guard let collectionView = self?.collectionView else { return }
+                switch changes {
+                case .initial:
+                    collectionView.reloadData()
+                case .update(_, let deletions, let insertions, let modifications):
+                    collectionView.performBatchUpdates({
+                        collectionView.insertItems(at: insertions.map({IndexPath(row: $0, section: 0) }))
+                        collectionView.deleteItems(at: deletions.map({IndexPath(row: $0, section: 0)}))
+                        collectionView.reloadItems(at: modifications.map({IndexPath(row: $0, section: 0) }))
+                    }, completion: nil)
+                case .error(let error):
+                    fatalError("\(error)")
+                }
+            }
         } catch {
             print(error)
         }
     }
-
 
     // MARK: UICollectionViewDataSource
 
 
     override func collectionView(_ collectionView: UICollectionView,
                                  numberOfItemsInSection section: Int) -> Int {
-        photos.count
+        photos?.count ?? 0
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! PhotoCollectionCell
-        cell.photo = photos[indexPath.row]
+        cell.photo = photos![indexPath.row]
         return cell
     }
-
+    
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-            let controller = FullScreenImageController()
-            controller.startFromImage = indexPath.row
-            controller.friendImages = photos
-            controller.modalPresentationStyle = .fullScreen
-            present(controller, animated: true)
+        let controller = FullScreenImageController()
+        controller.startFromImage = indexPath.row
+        controller.friendImages = Array(photos!)
+        controller.modalPresentationStyle = .fullScreen
+        present(controller, animated: true)
     }
 
     // MARK: Helpers

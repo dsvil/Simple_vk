@@ -43,7 +43,7 @@ final class ApiGetFriendsVK {
         do {
             let realm = try Realm()
             realm.beginWrite()
-            realm.add(items, update: .modified)
+            realm.add(items, update: .all)
             print(realm.configuration.fileURL!)
             try realm.commitWrite()
         } catch {

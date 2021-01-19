@@ -26,14 +26,11 @@ class PhotoStaff: Object, Decodable {
     override static func primaryKey() -> String? {
         return "id"
     }
-
-
 }
 
 class GetUrl: Object, Decodable {
     @objc dynamic var type: String = ""
     @objc dynamic var url: String = ""
-
     let id = LinkingObjects(fromType: PhotoStaff.self, property: "sizes")
 
     enum CodingKeys: String, CodingKey {

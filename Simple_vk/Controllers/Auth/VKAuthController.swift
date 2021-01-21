@@ -7,8 +7,9 @@
 
 import UIKit
 import WebKit
+import Firebase
 
-class LogInController: UIViewController {
+class VKAuthController: UIViewController {
 
     //MARK: Properties
     private var webview = WKWebView()
@@ -19,9 +20,10 @@ class LogInController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .black
-        setUpNavTabBars()
-        webViewSetup()
-        loginRequest()
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        authentificateUserAndConfigureUI()
     }
 
     //MARK: Helpers
@@ -32,6 +34,21 @@ class LogInController: UIViewController {
         webview.navigationDelegate = self
         webview.backgroundColor = .black
     }
+    
+    func authentificateUserAndConfigureUI() {
+        if Auth.auth().currentUser == nil {
+            DispatchQueue.main.async {
+                let nav = UINavigationController(rootViewController: LoginController())
+                nav.modalPresentationStyle = .fullScreen
+                self.present(nav, animated: true)
+            }
+        } else {
+            setUpNavTabBars()
+            webViewSetup()
+            loginRequest()
+        }
+    }
+    
 
     //MARK: API
     func loginRequest() {
@@ -58,7 +75,7 @@ class LogInController: UIViewController {
 
 }
 
-extension LogInController: WKNavigationDelegate {
+extension VKAuthController: WKNavigationDelegate {
     func webView(_ webView: WKWebView, decidePolicyFor navigationResponse:
             WKNavigationResponse, decisionHandler: @escaping (WKNavigationResponsePolicy)
     -> Void) {

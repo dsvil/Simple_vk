@@ -53,6 +53,7 @@ class GroupsSearchController: UITableViewController, UISearchResultsUpdating {
         } catch {
             print(error)
         }
+        
     }
 
     // MARK: - SearchController
@@ -80,7 +81,16 @@ class GroupsSearchController: UITableViewController, UISearchResultsUpdating {
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        uploadSelectedGroup(groups[indexPath.row])
-        navigationController?.popViewController(animated: true)
+        let groupAtIndex = groups[indexPath.row]
+        uploadSelectedGroup(groupAtIndex)
+        let group = GroupsToWrite(id: groupAtIndex.id, name: groupAtIndex.name, profileImage: groupAtIndex.icon)
+        FireService.shared.uploadGroup(group: group) { [weak self](err, ref) in
+            if let error = err {
+                let alert = Utilities().alert(error.localizedDescription)
+                self?.present(alert, animated: true, completion: nil)
+            }
+            self?.navigationController?.popViewController(animated: true)
+        }
+        
     }
 }

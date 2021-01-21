@@ -48,7 +48,8 @@ final class ApiGetGroupsVK {
         do {
             let realm = try Realm()
             realm.beginWrite()
-            realm.add(items, update: .modified)
+            realm.deleteAll()
+            realm.add(items)
             try realm.commitWrite()
         } catch {
             print(error)

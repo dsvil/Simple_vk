@@ -20,7 +20,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
 
         window = UIWindow(windowScene: scene as! UIWindowScene)
-        window?.rootViewController = LogInController()
+        window?.rootViewController = VKAuthController()
         
 //        window?.rootViewController = NewsController()
         window?.makeKeyAndVisible()

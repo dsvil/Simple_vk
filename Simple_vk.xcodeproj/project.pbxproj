@@ -22,11 +22,14 @@
 		5B73DDF51663869FB7C1DD94 /* FullSizeFriendsImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B73DD8BAF2560BC98D0608C /* FullSizeFriendsImage.swift */; };
 		5B73DFCFD256451C401E0919 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B73DA74F9EA632ED2BD4008 /* Utilities.swift */; };
 		A121F66725A6BF8A00441713 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A121F66625A6BF8A00441713 /* GoogleService-Info.plist */; };
+		A152004125B9001B00047578 /* LoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A152004025B9001B00047578 /* LoginController.swift */; };
+		A152004425B9003800047578 /* RegistrationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A152004325B9003800047578 /* RegistrationController.swift */; };
+		A152004925B901A100047578 /* FireService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A152004825B901A100047578 /* FireService.swift */; };
 		A15A7127259A106600B4F9F7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A15A7126259A106600B4F9F7 /* AppDelegate.swift */; };
 		A15A7129259A106600B4F9F7 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A15A7128259A106600B4F9F7 /* SceneDelegate.swift */; };
 		A15A712E259A106600B4F9F7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A15A712C259A106600B4F9F7 /* Main.storyboard */; };
 		A15A7130259A106800B4F9F7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A15A712F259A106800B4F9F7 /* Assets.xcassets */; };
-		A15A713D259A10E800B4F9F7 /* LogInController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A15A713C259A10E800B4F9F7 /* LogInController.swift */; };
+		A15A713D259A10E800B4F9F7 /* VKAuthController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A15A713C259A10E800B4F9F7 /* VKAuthController.swift */; };
 		A15A7142259A114E00B4F9F7 /* MainTabControllerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A15A7141259A114E00B4F9F7 /* MainTabControllerViewController.swift */; };
 		A15A7145259A11A800B4F9F7 /* FriendsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A15A7144259A11A800B4F9F7 /* FriendsController.swift */; };
 		A15A7148259A11CD00B4F9F7 /* GroupsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A15A7147259A11CD00B4F9F7 /* GroupsController.swift */; };
@@ -60,13 +63,16 @@
 		5B73DD8BAF2560BC98D0608C /* FullSizeFriendsImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FullSizeFriendsImage.swift; sourceTree = "<group>"; };
 		5B73DEB2E6FF2A1FE8325629 /* AnimatedAvatarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimatedAvatarView.swift; sourceTree = "<group>"; };
 		A121F66625A6BF8A00441713 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		A152004025B9001B00047578 /* LoginController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginController.swift; sourceTree = "<group>"; };
+		A152004325B9003800047578 /* RegistrationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationController.swift; sourceTree = "<group>"; };
+		A152004825B901A100047578 /* FireService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FireService.swift; sourceTree = "<group>"; };
 		A15A7123259A106600B4F9F7 /* Simple_vk.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Simple_vk.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A15A7126259A106600B4F9F7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A15A7128259A106600B4F9F7 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		A15A712D259A106600B4F9F7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		A15A712F259A106800B4F9F7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A15A7134259A106800B4F9F7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		A15A713C259A10E800B4F9F7 /* LogInController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInController.swift; sourceTree = "<group>"; };
+		A15A713C259A10E800B4F9F7 /* VKAuthController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VKAuthController.swift; sourceTree = "<group>"; };
 		A15A7141259A114E00B4F9F7 /* MainTabControllerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabControllerViewController.swift; sourceTree = "<group>"; };
 		A15A7144259A11A800B4F9F7 /* FriendsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsController.swift; sourceTree = "<group>"; };
 		A15A7147259A11CD00B4F9F7 /* GroupsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupsController.swift; sourceTree = "<group>"; };
@@ -136,6 +142,16 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
+		A152004625B9004900047578 /* Auth */ = {
+			isa = PBXGroup;
+			children = (
+				A15A713C259A10E800B4F9F7 /* VKAuthController.swift */,
+				A152004325B9003800047578 /* RegistrationController.swift */,
+				A152004025B9001B00047578 /* LoginController.swift */,
+			);
+			path = Auth;
+			sourceTree = "<group>";
+		};
 		A15A711A259A106600B4F9F7 = {
 			isa = PBXGroup;
 			children = (
@@ -178,7 +194,7 @@
 			isa = PBXGroup;
 			children = (
 				A15A7153259AC76700B4F9F7 /* Main */,
-				A15A713C259A10E800B4F9F7 /* LogInController.swift */,
+				A152004625B9004900047578 /* Auth */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -201,6 +217,7 @@
 				A15A71B025A3522300B4F9F7 /* FetchNews.swift */,
 				A15A718D259EABA300B4F9F7 /* FetchPhotos.swift */,
 				A15A7184259DD63A00B4F9F7 /* FetchGroups.swift */,
+				A152004825B901A100047578 /* FireService.swift */,
 			);
 			path = API;
 			sourceTree = "<group>";
@@ -363,7 +380,7 @@
 			files = (
 				A15A714F259AC62700B4F9F7 /* NewsController.swift in Sources */,
 				A15A71AD25A1FED200B4F9F7 /* NewsCell.swift in Sources */,
-				A15A713D259A10E800B4F9F7 /* LogInController.swift in Sources */,
+				A15A713D259A10E800B4F9F7 /* VKAuthController.swift in Sources */,
 				A15A7148259A11CD00B4F9F7 /* GroupsController.swift in Sources */,
 				A15A718B259EA73600B4F9F7 /* PhotoCollectionCell.swift in Sources */,
 				A15A71B425A3F7FD00B4F9F7 /* Constants.swift in Sources */,
@@ -374,6 +391,7 @@
 				A15A7188259EA4C700B4F9F7 /* FriendPhotoController.swift in Sources */,
 				A15A7142259A114E00B4F9F7 /* MainTabControllerViewController.swift in Sources */,
 				A15A714C259A16C300B4F9F7 /* Extentions.swift in Sources */,
+				A152004125B9001B00047578 /* LoginController.swift in Sources */,
 				5B73D0C030E9278CA73DB6F2 /* User.swift in Sources */,
 				5B73DD31A17940E9C4DB5951 /* SetUpCell.swift in Sources */,
 				5B73DFCFD256451C401E0919 /* Utilities.swift in Sources */,
@@ -388,8 +406,10 @@
 				A15A718E259EABA300B4F9F7 /* FetchPhotos.swift in Sources */,
 				5B73DCA1F613E9CC9A0F5FE6 /* GroupsViewModel.swift in Sources */,
 				5B73D9B42446D600F68DB798 /* FriendsViewModel.swift in Sources */,
+				A152004425B9003800047578 /* RegistrationController.swift in Sources */,
 				5B73D4375FA26EC38A227196 /* NavigationTransition.swift in Sources */,
 				5B73DDF51663869FB7C1DD94 /* FullSizeFriendsImage.swift in Sources */,
+				A152004925B901A100047578 /* FireService.swift in Sources */,
 				5B73DBA64BE2C4C55931828C /* GroupsSearchController.swift in Sources */,
 				5B73D85EC259F128E2F72C7B /* FriendsCell.swift in Sources */,
 			);

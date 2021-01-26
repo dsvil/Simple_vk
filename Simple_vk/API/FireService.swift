@@ -67,7 +67,6 @@ struct FireService {
         guard let userId = Session.instance.userId else {
             return
         }
-//        let userId = String(user)
         let groupId = String(group.id)
         let values = [
             "userIdVK": userId,

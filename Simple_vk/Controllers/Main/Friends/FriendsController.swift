@@ -11,8 +11,7 @@ import RealmSwift
 
 private let reuseIdentifier = "FriendsCell"
 
-class FriendsController: UITableViewController, UISearchResultsUpdating {
-
+    class FriendsController: UITableViewController, UISearchResultsUpdating {
     // MARK: Properties
     private var friends: Results<VkFriend>?
     private var token: NotificationToken?
@@ -25,8 +24,8 @@ class FriendsController: UITableViewController, UISearchResultsUpdating {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        configureUI()
         loadData()
+        configureUI()
         configureSearchController()
         ApiGetFriendsVK.shared.getData()
     }
@@ -117,7 +116,7 @@ class FriendsController: UITableViewController, UISearchResultsUpdating {
             do {
                 let realm = try Realm()
                 let predicate = NSPredicate(format: """
-                                                    lastName CONTAINS[cd] %@ OR 
+                                                    lastName CONTAINS[cd] %@ OR
                                                     firstName CONTAINS[cd] %@
                                                     """, textInSearch, textInSearch)
                 let filteredFriends = realm.objects(VkFriend.self).filter(predicate)

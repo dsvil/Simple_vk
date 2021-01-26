@@ -91,6 +91,5 @@ class GroupsSearchController: UITableViewController, UISearchResultsUpdating {
             }
             self?.navigationController?.popViewController(animated: true)
         }
-        
     }
 }
